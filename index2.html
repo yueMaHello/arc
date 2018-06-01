@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/93/three.min.js"></script>
+
+    <title>Add Graphics to a SceneView - 4.7</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.7/"></script>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
+    <script>
+        require([
+                "esri/Map",
+                "esri/views/SceneView",
+                "esri/layers/GraphicsLayer",
+                "esri/Graphic",
+                "esri/geometry/Polyline",
+                "dojo/domReady!",
+
+            ],
+            function(
+                Map, SceneView, GraphicsLayer, Graphic,Polyline
+            ) {
+
+                var map = new Map({
+                    basemap: "dark-gray"
+                });
+
+                var view = new SceneView({
+                    container: "viewDiv",
+                    map: map,
+
+                    camera: { // autocasts as new Camera()
+                        position: { // autocasts as new Point()
+                            x: -113,
+                            y: 51.44543992422466,
+                            z: 1266.7049653716385
+                        },
+                        heading: 0.34445102566290225,
+                        tilt: 82.95536300536367
+                    }
+                });
+
+                /*********************
+                 * Add graphics layer
+                 *********************/
+
+                var graphicsLayer = new GraphicsLayer();
+                map.add(graphicsLayer);
+
+
+                /****************************
+                 * Add a 3D polyline graphic
+                 ****************************/
+                // var curve = new THREE.CubicBezierCurve3(
+                //     new THREE.Vector3( -113.5, 53, 0 ),
+                //     new THREE.Vector3( -113, 53, 20000 ),
+                //     new THREE.Vector3( -113, 53, 20000 ),
+                //     new THREE.Vector3( -111.5, 53, 0 )
+                // );
+                // var curve2 = new THREE.CubicBezierCurve3(
+                //     new THREE.Vector3( -113.5, 53, 0 ),
+                //     new THREE.Vector3( -113, 53.25, 20000 ),
+                //     new THREE.Vector3( -113, 53.25, 20000 ),
+                //     new THREE.Vector3( -112.5, 53.5, 0 )
+                // );
+
+
+                function generatePolylineArray(startpoint, endpoint){
+
+                    var curveline =  new THREE.Line3(
+                        startpoint,endpoint
+                    );
+
+                    var distance = curveline.distance();
+                    var centerPoint = curveline.getCenter();
+
+                    centerPoint.z = distance*20000;
+
+                    var curve = new THREE.CubicBezierCurve3(
+                       startpoint,
+                       centerPoint,
+                       centerPoint,
+                        endpoint
+                    );
+
+                    var points = curve.getPoints(20);
+                    var array = [];
+                    for (var i in points) {
+
+                        array.push([points[i]["x"],points[i]["y"],points[i]["z"]])
+
+                    }
+                    return array;
+
+
+                }
+
+                array= generatePolylineArray(new THREE.Vector3( -113.5, 53, 0),new THREE.Vector3(-112.5, 53.5, 0));
+
+
+
+
+
+                var polyline = {
+                    type: "polyline", // autocasts as new Polyline()
+                    paths: [array]
+
+                };
+
+
+
+                var polylineGraphic = new Graphic({
+                    geometry: polyline,
+                    symbol: {
+                        type: "simple-line", // autocasts as SimpleLineSymbol()
+                        color: [226, 119, 40],
+                        width: 1
+                    }
+                });
+
+                graphicsLayer.add(polylineGraphic);
+
+                array2= generatePolylineArray(new THREE.Vector3( -113.5, 53, 0),new THREE.Vector3(-112.9, 52.5, 0));
+                var polyline2= {
+                    type: "polyline", // autocasts as new Polyline()
+                    paths: [array2]
+
+                };
+
+                //polyline['paths'].push(array2);
+                console.log(polyline);
+
+
+
+                var polylineGraphic2 = new Graphic({
+                    geometry: polyline2,
+                    symbol: {
+                        type: "simple-line", // autocasts as SimpleLineSymbol()
+                        color: [226, 119, 40],
+                        width: 4
+                    }
+                });
+
+                graphicsLayer.add(polylineGraphic2);
+                array2= generatePolylineArray(new THREE.Vector3( -113.5, 53, 0),new THREE.Vector3(-112.9, 52.5, 0));
+                var polyline2= {
+                    type: "polyline", // autocasts as new Polyline()
+                    paths: [array2]
+
+                };
+
+                //polyline['paths'].push(array2);
+                console.log(polyline);
+
+
+
+                var polylineGraphic2 = new Graphic({
+                    geometry: polyline2,
+                    symbol: {
+                        type: "simple-line", // autocasts as SimpleLineSymbol()
+                        color: [226, 119, 40],
+                        width: 4
+                    }
+                });
+
+                graphicsLayer.add(polylineGraphic2);
+                array3= generatePolylineArray(new THREE.Vector3( -113.5, 53, 0),new THREE.Vector3(-111.9, 52.5, 0));
+                var polyline3= {
+                    type: "polyline", // autocasts as new Polyline()
+                    paths: [array3]
+
+                };
+
+                //polyline['paths'].push(array2);
+                console.log(polyline);
+
+
+
+                var polylineGraphic3 = new Graphic({
+                    geometry: polyline3,
+                    symbol: {
+                        type: "simple-line", // autocasts as SimpleLineSymbol()
+                        color: [226, 119, 40],
+                        width: 2
+                    }
+                });
+
+                graphicsLayer.add(polylineGraphic3);
+
+
+                array4= generatePolylineArray(new THREE.Vector3( -113.5, 53, 0),new THREE.Vector3(-112.9, 54.5, 0));
+                var polyline4= {
+                    type: "polyline", // autocasts as new Polyline()
+                    paths: [array4]
+
+                };
+
+
+
+                var polylineGraphic4 = new Graphic({
+                    geometry: polyline4,
+                    symbol: {
+                        type: "simple-line", // autocasts as SimpleLineSymbol()
+                        color: [226, 119, 40],
+                        width: 4
+                    }
+                });
+
+                graphicsLayer.add(polylineGraphic4);
+                /***************************
+                 * Add a 3D polygon graphic
+                 ***************************/
+
+
+
+
+            });
+    </script>
+</head>
+
+<body>
+<div id="viewDiv"></div>
+</body>
+
+</html>
